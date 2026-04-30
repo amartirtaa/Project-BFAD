@@ -15,6 +15,8 @@ def load_data(path):
 
     # Pastikan kolom tanggal dalam format datetime
     data['order_purchase_timestamp'] = pd.to_datetime(data['order_purchase_timestamp'])
+    data['year'] = data['order_purchase_timestamp'].dt.year
+    data['month'] = data['order_purchase_timestamp'].dt.month
     return data
 
 # --- Memuat Data ---
