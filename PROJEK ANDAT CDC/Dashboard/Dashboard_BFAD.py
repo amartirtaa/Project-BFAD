@@ -18,7 +18,7 @@ def load_data(path):
     return data
 
 # --- Memuat Data ---
-df = load_data('BFAD_file.csv')
+df = load_data('Dashboard/BFAD_file.csv')
 
 
 # SIDEBAR FILTER
