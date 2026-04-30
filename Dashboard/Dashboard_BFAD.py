@@ -126,6 +126,7 @@ st.markdown("### 🛍️ Top 3 Kategori Produk dengan Revenue Tertinggi per Tahu
 
 revenue_yearly = (
     df_filtered
+    .dropna(subset=['product_category_name_english'])
     .groupby(['year', 'product_category_name_english'])['payment_value']
     .sum()
     .reset_index()
@@ -133,21 +134,27 @@ revenue_yearly = (
 
 top3_per_year = (
     revenue_yearly
-    .groupby('year', group_keys=False)
-    .apply(lambda x: x.nlargest(3, 'payment_value'))
+    .sort_values(['year', 'payment_value'], ascending=[True, False])
+    .groupby('year')
+    .head(3)
 )
 
-fig3, ax3 = plt.subplots(figsize=(10,6))
-sns.barplot(
-    data=top3_per_year,
-    x='year',
-    y='payment_value',
-    hue='product_category_name_english',
-    ax=ax3
-)
+if top3_per_year.empty:
+    st.warning("Data kosong untuk visualisasi Top 3")
+else:
+    fig3, ax3 = plt.subplots(figsize=(10,6))
 
-ax3.set_title('Top 3 Kategori Produk per Tahun')
-st.pyplot(fig3)
+    sns.barplot(
+        data=top3_per_year,
+        x='year',
+        y='payment_value',
+        hue='product_category_name_english',
+        ax=ax3
+    )
+
+    ax3.set_title('Top 3 Kategori Produk per Tahun')
+    st.pyplot(fig3)
+
 
 # RFM ANALYSIS
 st.markdown("### 👥 RFM Analysis")
